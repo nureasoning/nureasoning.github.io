@@ -374,15 +374,30 @@ Experimental results show that our approach outperforms video synthesis models t
           <div class="content has-text-justified">
             <div class="column is-four-fifths"></div>
               <div class="has-text-centered">
-                <video controls autoplay muted loop>
-                  <source src="static/videos/concat_compare1.mp4" type="video/mp4">
-                </video>
-                <video controls autoplay muted loop>
-                  <source src="static/videos/concat_compare2.mp4" type="video/mp4">
-                </video>
-                <video controls autoplay muted loop>
-                  <source src="static/videos/concat_compare3.mp4" type="video/mp4">
-                </video>
+                <div style="display: flex; align-items: center;">
+                  <video id="left1" autoplay muted loop style="width: 15%; margin-right: 10px;">
+                    <source src="static/videos/forward.mp4" type="video/mp4">
+                  </video>
+                  <video id="concat1" controls autoplay muted loop style="width: 85%;">
+                    <source src="static/videos/concat_compare1.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <div style="display: flex; align-items: center;">
+                  <video id="left2" autoplay muted loop style="width: 15%; margin-right: 10px;">
+                    <source src="static/videos/right.mp4" type="video/mp4">
+                  </video>
+                  <video id="concat2" controls autoplay muted loop style="width: 85%;">
+                    <source src="static/videos/concat_compare2.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <div style="display: flex; align-items: center;">
+                  <video id="left3" autoplay muted loop style="width: 15%; margin-right: 10px;">
+                    <source src="static/videos/backward.mp4" type="video/mp4">
+                  </video>
+                  <video id="concat3" controls autoplay muted loop style="width: 85%;">
+                    <source src="static/videos/concat_compare3.mp4" type="video/mp4">
+                  </video>
+                </div>
                 
               </div>
           </div>
