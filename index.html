@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-55V1E709SK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-55V1E709SK');
+  </script>
+
+  <meta charset="utf-8">
+  <meta name="description"
+    content="nuReasoning: A reasoning-centric dataset and benchmark for long-tail autonomous driving.">
+  <meta name="keywords" content="nuReasoning, autonomous driving, long-tail driving, reasoning benchmark, planning benchmark, visual question answering">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>nuReasoning</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css?v=2">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/script.js"></script>
+
+</head>
+
+<body>
+
+  <!-- <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav> -->
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container hero-title-container">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title"><span
+                style="color: #332a97; font-weight: bolder;">nuReasoning:</span><br/>
+              <span class="hero-title-line2">A Reasoning-Centric Dataset and Benchmark <br/>
+                for Long-Tail Autonomous Driving</span></h1>
+<!-- <p class="subtitle is-4" style="color: #cb2828; font-weight: bold;">Accepted to NeurIPS 2025</p> -->
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><strong>Zhiyu Huang</strong><sup>1,*</sup></span>
+              <span class="author-block"><strong>Johnson Liu</strong><sup>1,*</sup></span>
+              <span class="author-block"><strong>Rui Song</strong><sup>1,*</sup></span>
+              <span class="author-block"><strong>Zewei Zhou</strong><sup>1,2</sup></span>
+              <span class="author-block"><strong>Ruining Yang</strong><sup>2</sup></span>
+              <br>
+              <span class="author-block"><strong>Yun Zhang</strong><sup>1</sup></span>
+              <span class="author-block"><strong>Tianhui Cai</strong><sup>1</sup></span>
+              <span class="author-block"><strong>Hanyin Zhang</strong><sup>1</sup></span>
+              <span class="author-block"><strong>Mingxuan Gao</strong><sup>1</sup></span>
+              <span class="author-block"><strong>Valeria Xu</strong><sup>1</sup></span>
+              <br>
+              <span class="author-block"><strong>Jiali Chen</strong><sup>1</sup></span>
+              <span class="author-block"><strong>Yishan Shen</strong><sup>2</sup></span>
+              <span class="author-block"><strong>Yiluan Guo</strong><sup>2</sup></span>
+              <span class="author-block"><strong>Tony (Xuewei) Qi</strong><sup>2,&dagger;</sup></span>
+              <span class="author-block"><strong>Jiaqi Ma</strong><sup>1</sup></span>
+              <div class="is-size-6">
+                <span><sup>*</sup>Equal contribution.</span>
+                <span><sup>&dagger;</sup>Project lead. Corresponding author.</span>
+              </div>
+          </div>
+                    <!-- TODO: update paper and video link once upload -->
+          <div class="column has-text-centered">
+            <!-- <div class="publication-links"> -->
+              <!-- PDF Link. -->
+              <span class="link-block">
+              <a href="#"
+                 class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                </span>
+                <span>Paper</span>
+              </a>
+              </span>
+              <span class="link-block">
+              <a href="https://huggingface.co/datasets/qixuewei/nuReasoning"
+                 class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <img src="https://huggingface.co/front/assets/huggingface_logo.svg" alt="Hugging Face Logo" style="width: 1em; height: 1em; vertical-align: middle;">
+                    </span>
+                <span>Dataset</span>
+              </a>
+
+            </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=fxf_ypd7eD8" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="#"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fab fa-github"></i>
+                  </span>
+                  <span>Benchmark (Coming Soon)</span>
+                </a>
+              </span>
+            </div>
+
+
+          <div class="subtitle is-size-5 affiliation-logos">
+            <span class="affiliation-logo-item">
+              <sup>1</sup>
+              <img src="https://logos-world.net/wp-content/uploads/2021/11/University-of-California-Los-Angeles-UCLA-Emblem.png"
+                   alt="UCLA" class="affiliation-logo-img affiliation-logo-ucla" loading="lazy">
+            </span>
+            <span class="affiliation-logo-item">
+              <sup>2</sup>
+              <img src="https://sa-asimov.nl/wp-content/uploads/2022/09/Motional-Logo_Horizontal_Full-Color.png"
+                   alt="Motional" class="affiliation-logo-img affiliation-logo-motional" loading="lazy">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+  </section>
+
+
+  
+
+  <section class="hero is-light is-small">
+    <div class="hero-body">
+      <div class="container">
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="item item-clip-1">
+            <video id="carousel-video-1" controls muted loop playsinline preload="metadata">
+              <source src="./static/videos/2026.02.17.18.38.31_PFDKB4AE8RF000073_ad3c17da88c5585e807bbf223d014d9c.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-clip-2">
+            <video id="carousel-video-2" controls muted loop playsinline preload="metadata">
+              <source src="./static/videos/1770226169800022.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-clip-3">
+            <video id="carousel-video-3" controls muted loop playsinline preload="metadata">
+              <source src="./static/videos/1769486450449928.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-clip-4">
+            <video id="carousel-video-4" controls muted loop playsinline preload="metadata">
+              <source src="./static/videos/1770863755350086.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-clip-5">
+            <video id="carousel-video-5" controls muted loop playsinline preload="metadata">
+              <source src="./static/videos/1770837909250412.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-clip-6">
+            <video id="carousel-video-6" controls muted loop playsinline preload="metadata">
+              <source src="./static/videos/1764605247850010.mp4" type="video/mp4">
+            </video>
+          </div>
+
+          <!-- <div class="item item-sora3">
+            <video poster="" id="horse" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/sora_2.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-sora2">
+            <video poster="" id="horse" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/sora_3.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+          <div class="item item-sora1">
+            <video poster="" id="horse" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/sora_1.mp4"
+                      type="video/mp4">
+            </video>
+          </div> -->
+        </div>
+        <p class="video-caption">
+          <strong>nuReasoning</strong> contains 20K 20-second long-tail driving data clips from real-world scenarios.
+        </p>
+      </div>
+    </div>
+  </section>
+    
+
+
+
+
+
+  <section class="section overview-section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <!-- <div class="column is-four-fifths"> -->
+          <div class="column is-full-width">
+          <h2 class="title is-3">Overview</h2>
+          <div class="content has-text-justified">
+            <img src="./static/images/overview.png" width="100%">
+            <p>
+              <strong>nuReasoning</strong> is a large-scale real-world long-tail driving dataset containing 20K 20-second clips across diverse scenario types. The dataset provides high-quality reasoning annotations spanning spatial reasoning, driving decisions, and counterfactual reasoning. Compared with prior datasets, nuReasoning offers substantially larger-scale long-tail driving data and richer reasoning annotations, enabling models trained on it to achieve significantly improved reasoning and planning performance.
+            </p>
+
+
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+      <div class="column is-four-fifths"></div>
+      <div class="has-text-centered">
+        <!-- <h2 class="title is-3">Video</h2> -->
+        <!-- TODO replace the place holder video with the correct video and delete the plaveholder video from folder -->
+        <!-- <video controls> -->
+          <!-- <source src="static/videos/demo1.mp4" type="video/mp4"> -->
+          <!-- <source src="static/videos/demo.mp4" type="video/mp4"> -->
+          <!-- Your browser does not support the video.
+        </video> -->
+        <!-- The following is the way to insert through link -->
+        <!-- <div class="publication-video">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/470hul75bSM?si=7F9NL8zWbU9GtqHb"
+            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; 
+         encrypted-media; " allowfullscreen></iframe> -->
+      </div>
+    </div>
+    </div>
+  </section>
+
+
+  <section class="section data-schema-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Data Schema</h2>
+          <div class="content has-text-justified">
+            <img class="data-schema-image" src="./static/images/data.png" alt="nuReasoning data schema" loading="lazy">
+            <ul class="data-schema-list">
+              <li><strong>Clip-based dataset:</strong> 20-second real-world autonomous driving clips.</li>
+              <li><strong>Rich synchronized observations:</strong> multi-view camera, 3D scene, planning, route, and traffic signal context.</li>
+              <li><strong>Reasoning annotations:</strong> spatial reasoning, decision reasoning, and counterfactual reasoning.</li>
+              <li><strong>Dataset scale:</strong> 20K long-tail driving clips with high-quality reasoning annotations.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section challenge-section">
+    <div class="container is-max-desktop">
+      <!-- Concurrent Work. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Challenge</h2>
+          <div class="content">
+            <div class="challenge-timeline">
+              <h3 class="timeline-heading">Tentative Timeline</h3>
+              <div class="timeline-item">
+                <div class="timeline-dot">1</div>
+                <div class="timeline-date">2026/06</div>
+                <div class="timeline-content">Mini dataset release (10% of the full dataset)</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot">2</div>
+                <div class="timeline-date">2026/08</div>
+                <div class="timeline-content">Full dataset release</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot">3</div>
+                <div class="timeline-date">2026/09</div>
+                <div class="timeline-content">Challenge start <span class="timeline-note">(stay tuned)</span></div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot">4</div>
+                <div class="timeline-date">2026/11</div>
+                <div class="timeline-content">Challenge close</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot">5</div>
+                <div class="timeline-date">2026/12</div>
+                <div class="timeline-content">Winner announced</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!--/ Concurrent Work. -->
+
+    </div>
+  </section>
+
+  
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Reasoning Annotations</h2>
+          <div class="content has-text-justified">
+            <div class="column is-four-fifths"></div>
+              <div class="has-text-centered annotation-videos">
+                <!-- <video controls autoplay muted loop>
+                  <source src="static/videos/compare1.mp4" type="video/mp4">
+                </video> -->
+                <video controls autoplay muted loop>
+                  <source src="./static/videos/1770226169800022.mp4" type="video/mp4">
+                </video>
+                <video controls autoplay muted loop>
+                  <source src="./static/videos/1769486450449928.mp4" type="video/mp4">
+                </video>
+                <video controls autoplay muted loop>
+                  <source src="./static/videos/1770863755350086.mp4" type="video/mp4">
+                </video>
+                <video controls autoplay muted loop>
+                  <source src="./static/videos/1770837909250412.mp4" type="video/mp4">
+                </video>
+                <video controls autoplay muted loop>
+                  <source src="./static/videos/1764605247850010.mp4" type="video/mp4">
+                </video>
+                <video controls autoplay muted loop>
+                  <source src="./static/videos/1706095630099979.mp4" type="video/mp4">
+                </video>
+                
+              </div>
+          </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section> 
+
+  <script>
+    new BeforeAfter({
+      id: '#example1'
+    });
+    new BeforeAfter({
+      id: '#example2'
+    });
+    new BeforeAfter({
+      id: '#example3'
+    });
+    new BeforeAfter({
+      id: '#example4'
+    });
+    new BeforeAfter({
+      id: '#example5'
+    });
+    new BeforeAfter({
+      id: '#example6'
+    });
+    new BeforeAfter({
+      id: '#example7'
+    });
+    new BeforeAfter({
+      id: '#example8'
+    });
+    new BeforeAfter({
+      id: '#example9'
+    });
+    new BeforeAfter({
+      id: '#example10'
+    });
+
+  </script>
+
+  <section class="section benchmark-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Benchmark</h2>
+          <div class="benchmark-grid">
+            <div class="benchmark-card">
+              <h3 class="benchmark-title">Reasoning VQA Benchmark</h3>
+              <img src="./static/images/reasoning.png" alt="Reasoning VQA benchmark overview" loading="lazy">
+            </div>
+            <div class="benchmark-card">
+              <h3 class="benchmark-title">Planning Benchmark</h3>
+              <img src="./static/images/planning.png" alt="Planning benchmark overview" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section results-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Results</h2>
+          <div class="benchmark-grid">
+            <div class="benchmark-card">
+              <h3 class="benchmark-title">Reasoning VQA Results</h3>
+              <p>Models trained on nuReasoning significantly improve reasoning performance across all four core capabilities in driving tasks compared to both base models and other general-purpose models.</p>
+              <img src="./static/images/reasoning_result.png" alt="Reasoning VQA benchmark results" loading="lazy">
+            </div>
+            <div class="benchmark-card">
+              <h3 class="benchmark-title">Planning Results</h3>
+              <p>The nuVLA model outperforms state-of-the-art AV planning methods, while training with all reasoning types (spatial, driving, and counterfactual) yields the best overall planning performance.</p>
+              <img src="./static/images/planning_result.png" alt="Planning benchmark results" loading="lazy">
+            </div>
+            <div class="benchmark-card">
+              <h3 class="benchmark-title">Qualitative Results</h3>
+              <img src="./static/images/qualitative1.png" alt="Qualitative result example 1" loading="lazy">
+              <img src="./static/images/qualitative2.png" alt="Qualitative result example 2" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bibtex-section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 has-text-centered">BibTeX</h2>
+          <pre class="bibtex-block"><code>@misc{nureasoning2026,
+  title        = {nuReasoning: A Reasoning-Centric Dataset and Benchmark for Long-Tail Autonomous Driving},
+  author       = {Huang, Zhiyu and Liu, Johnson and Song, Rui and Zhou, Zewei and Yang, Ruining and Zhang, Yun and Cai, Tianhui and Zhang, Hanyin and Gao, Mingxuan and Xu, Valeria and Chen, Jiali and Shen, Yishan and Guo, Yiluan and Qi, Xuewei and Ma, Jiaqi},
+  year         = {2026},
+  note         = {Placeholder citation.}
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Related Links</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            Needs update
+          </p>
+         
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section> -->
+  
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <p>
+          <strong>nuReasoning</strong> is a reasoning-centric dataset and benchmark for long-tail autonomous driving.
+        </p>
+        <p>
+          For questions, please contact <a href="mailto:qixuewei@gmail.com">qixuewei@gmail.com</a>.
+        </p>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content has-text-centered">
+            <p>
+              This website is maintained by the nuReasoning team at UCLA and Motional AD Inc.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
