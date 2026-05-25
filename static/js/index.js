@@ -20,38 +20,6 @@ function setInterpolationImage(i) {
 }
 
 
-function pauseCarouselVideos(container) {
-  if (!container) {
-    return;
-  }
-  container.querySelectorAll('video').forEach(function(video) {
-    video.pause();
-  });
-}
-
-function playCurrentCarouselVideo(container) {
-  if (!container) {
-    return;
-  }
-  var currentSlide = container.querySelector('.slider-item.is-current');
-  if (!currentSlide) {
-    return;
-  }
-  var video = currentSlide.querySelector('video');
-  if (!video) {
-    return;
-  }
-  var playPromise = video.play();
-  if (playPromise !== undefined) {
-    playPromise.catch(function() {});
-  }
-}
-
-function syncCarouselVideos(container) {
-  pauseCarouselVideos(container);
-  playCurrentCarouselVideo(container);
-}
-
 $(document).ready(function() {
     // Check for click events on the navbar burger icon
     $(".navbar-burger").click(function() {
@@ -61,11 +29,10 @@ $(document).ready(function() {
 
     });
 
-    var resultsCarouselEl = document.getElementById('results-carousel');
     var options = {
     slidesToScroll: 1,
-    slidesToShow: 1,
-    centerMode: true,
+    slidesToShow: 2,
+    centerMode: true, // Enable center mode
     loop: true,
     infinite: true,
     autoplay: false,
@@ -75,18 +42,12 @@ $(document).ready(function() {
 		// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
 
-    for (var i = 0; i < carousels.length; i++) {
-      if (carousels[i].element === resultsCarouselEl) {
-        carousels[i].on('after:show', function() {
-          syncCarouselVideos(resultsCarouselEl);
-        });
-      }
-    }
-
-    if (resultsCarouselEl) {
-      window.setTimeout(function() {
-        syncCarouselVideos(resultsCarouselEl);
-      }, 150);
+    // Loop on each carousel initialized
+    for(var i = 0; i < carousels.length; i++) {
+    	// Add listener to  event
+    	carousels[i].on('before:show', state => {
+    		console.log(state);
+    	});
     }
 
     // Access to bulmaCarousel instance of an element
