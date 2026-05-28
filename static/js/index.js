@@ -35,7 +35,7 @@ $(document).ready(function() {
     centerMode: true, // Enable center mode
     loop: true,
     infinite: true,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 3000,
 };
 

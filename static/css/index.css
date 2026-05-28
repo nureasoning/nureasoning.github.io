@@ -397,21 +397,18 @@ body {
   margin-left: -1.5px;
 }
 
+:root {
+  --section-spacing: 3rem;
+}
+
 .section {
   width: 100%;
+  padding: var(--section-spacing) 1.5rem;
 }
 
-.overview-section {
-  padding-bottom: 1rem;
-}
-
-.challenge-section {
-  padding-top: 1rem;
-}
-
-.data-schema-section {
-  padding-top: 2rem;
-  padding-bottom: 1rem;
+.hero.is-light.is-small .hero-body {
+  padding-top: var(--section-spacing);
+  padding-bottom: var(--section-spacing);
 }
 
 .data-schema-image {
@@ -427,8 +424,14 @@ body {
 }
 
 
-.title.is-3{
+.title.is-3 {
   color: #332a97;
+  margin-bottom: 1.5rem;
+}
+
+.section .content > img {
+  display: block;
+  width: 100%;
 }
 
 .challenge-timeline {
@@ -519,11 +522,6 @@ body {
   font-weight: 500;
 }
 
-.results-section,
-.benchmark-section {
-  padding-top: 2rem;
-}
-
 .benchmark-grid {
   display: grid;
   gap: 1.5rem;
@@ -553,10 +551,6 @@ body {
 
 .benchmark-card img + img {
   margin-top: 1rem;
-}
-
-.bibtex-section {
-  padding-top: 2rem;
 }
 
 .bibtex-block {
