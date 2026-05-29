@@ -51,6 +51,20 @@ $(document).ready(function() {
       });
     }
 
+    function disableResultsCarouselSwipe(carousel) {
+      if (!carousel || !carousel.container || !carousel._swipe) {
+        return;
+      }
+
+      carousel.container.removeEventListener('mousedown', carousel._swipe.onStartDrag);
+      carousel.container.removeEventListener('touchstart', carousel._swipe.onStartDrag);
+      window.removeEventListener('mousemove', carousel._swipe.onMoveDrag);
+      window.removeEventListener('touchmove', carousel._swipe.onMoveDrag);
+      window.removeEventListener('mouseup', carousel._swipe.onStopDrag);
+      window.removeEventListener('touchend', carousel._swipe.onStopDrag);
+      window.removeEventListener('touchcancel', carousel._swipe.onStopDrag);
+    }
+
     function playCenteredCarouselVideo() {
       var carouselEl = document.getElementById('results-carousel');
       if (!carouselEl) return;
@@ -113,6 +127,7 @@ $(document).ready(function() {
         });
 
         stopCarouselControlPropagation(resultsCarouselEl);
+        disableResultsCarouselSwipe(carousels[i]);
         scheduleCarouselVideoSync();
       }
     }
