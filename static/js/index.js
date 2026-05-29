@@ -85,8 +85,7 @@ $(document).ready(function() {
     centerMode: false,
     loop: true,
     infinite: true,
-    autoplay: true,
-    autoplaySpeed: 20000,
+    autoplay: false,
 };
 
 		// Initialize all div with carousel class
