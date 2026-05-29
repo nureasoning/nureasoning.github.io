@@ -29,108 +29,76 @@ $(document).ready(function() {
 
     });
 
-    var options = {
-    slidesToScroll: 1,
-    slidesToShow: 1,
-    centerMode: false,
-    loop: true,
-    infinite: true,
-    autoplay: true,
-    autoplaySpeed: 20000,
-};
-
-    function stopCarouselControlPropagation(carouselEl) {
-      var controlEvents = ['mousedown', 'touchstart', 'pointerdown', 'click'];
-
-      carouselEl.querySelectorAll('video').forEach(function(video) {
-        controlEvents.forEach(function(eventName) {
-          video.addEventListener(eventName, function(event) {
-            event.stopPropagation();
-          });
-        });
-      });
-    }
-
-    function disableResultsCarouselSwipe(carousel) {
-      if (!carousel || !carousel.container || !carousel._swipe) {
-        return;
-      }
-
-      carousel.container.removeEventListener('mousedown', carousel._swipe.onStartDrag);
-      carousel.container.removeEventListener('touchstart', carousel._swipe.onStartDrag);
-      window.removeEventListener('mousemove', carousel._swipe.onMoveDrag);
-      window.removeEventListener('touchmove', carousel._swipe.onMoveDrag);
-      window.removeEventListener('mouseup', carousel._swipe.onStopDrag);
-      window.removeEventListener('touchend', carousel._swipe.onStopDrag);
-      window.removeEventListener('touchcancel', carousel._swipe.onStopDrag);
-    }
-
-    function playCenteredCarouselVideo() {
+    function initResultsCarousel() {
       var carouselEl = document.getElementById('results-carousel');
       if (!carouselEl) return;
 
-      carouselEl.querySelectorAll('video').forEach(function(video) {
-        video.pause();
+      var items = Array.prototype.filter.call(carouselEl.children, function(child) {
+        return child.classList.contains('item');
       });
+      if (!items.length) return;
 
-      var slider = carouselEl.querySelector('.slider');
-      if (!slider) return;
+      var currentIndex = 0;
+      var autoplayTimer = null;
+      var autoplaySpeed = 20000;
 
-      var sliderRect = slider.getBoundingClientRect();
-      var centerX = sliderRect.left + sliderRect.width / 2;
-      var activeVideo = null;
-      var bestDistance = Infinity;
-
-      carouselEl.querySelectorAll('.slider-item').forEach(function(item) {
-        var rect = item.getBoundingClientRect();
-        if (rect.width === 0) return;
-
-        var distance = Math.abs(rect.left + rect.width / 2 - centerX);
-        if (distance < bestDistance) {
-          bestDistance = distance;
-          activeVideo = item.querySelector('video');
-        }
-      });
-
-      if (activeVideo) {
-        activeVideo.muted = true;
-        var playPromise = activeVideo.play();
+      function playVideo(video) {
+        video.muted = true;
+        var playPromise = video.play();
         if (playPromise && playPromise.catch) {
           playPromise.catch(function() {});
         }
       }
-    }
 
-    function scheduleCarouselVideoSync() {
-      requestAnimationFrame(function() {
-        requestAnimationFrame(playCenteredCarouselVideo);
-      });
-    }
+      function showItem(nextIndex) {
+        currentIndex = (nextIndex + items.length) % items.length;
 
-		// Initialize all div with carousel class
-    var carousels = bulmaCarousel.attach('.carousel', options);
+        items.forEach(function(item, itemIndex) {
+          var video = item.querySelector('video');
+          var isActive = itemIndex === currentIndex;
 
-    var resultsCarouselEl = document.getElementById('results-carousel');
-    for (var i = 0; i < carousels.length; i++) {
-      if (carousels[i].element.id === 'results-carousel') {
-        carousels[i].on('show', scheduleCarouselVideoSync);
+          item.classList.toggle('is-active', isActive);
+          if (!video) return;
 
-        var sliderContainer = resultsCarouselEl.querySelector('.slider-container');
-        if (sliderContainer) {
-          sliderContainer.addEventListener('transitionend', scheduleCarouselVideoSync);
-        }
-
-        resultsCarouselEl.addEventListener('click', function(event) {
-          if (event.target.closest('.slider-navigation-next, .slider-navigation-previous, .slider-pagination, .slider-page')) {
-            scheduleCarouselVideoSync();
+          if (isActive) {
+            playVideo(video);
+          } else {
+            video.pause();
           }
         });
 
-        stopCarouselControlPropagation(resultsCarouselEl);
-        disableResultsCarouselSwipe(carousels[i]);
-        scheduleCarouselVideoSync();
+        restartAutoplay();
       }
+
+      function showNext() {
+        showItem(currentIndex + 1);
+      }
+
+      function showPrevious() {
+        showItem(currentIndex - 1);
+      }
+
+      function restartAutoplay() {
+        window.clearInterval(autoplayTimer);
+        autoplayTimer = window.setInterval(showNext, autoplaySpeed);
+      }
+
+      function createButton(className, label, onClick) {
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = className;
+        button.setAttribute('aria-label', label);
+        button.textContent = label === 'Previous video' ? '<' : '>';
+        button.addEventListener('click', onClick);
+        carouselEl.appendChild(button);
+      }
+
+      createButton('results-carousel-nav results-carousel-prev', 'Previous video', showPrevious);
+      createButton('results-carousel-nav results-carousel-next', 'Next video', showNext);
+      showItem(0);
     }
+
+    initResultsCarousel();
 
     // Access to bulmaCarousel instance of an element
     var element = document.querySelector('#my-element');

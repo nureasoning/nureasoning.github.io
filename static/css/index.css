@@ -162,15 +162,21 @@ body {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
+  position: relative;
 }
 
 .results-carousel .item {
+  display: none;
   margin: 0;
   overflow: hidden;
   border: 1px solid #bbb;
   border-radius: 10px;
   padding: 0;
   font-size: 0;
+}
+
+.results-carousel .item.is-active {
+  display: block;
 }
 
 .results-carousel video {
@@ -182,6 +188,34 @@ body {
   margin: 0;
   background: #000;
   pointer-events: auto;
+}
+
+.results-carousel-nav {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(50, 50, 50, 0.15);
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  font-size: 1.5rem;
+  height: 42px;
+  justify-content: center;
+  line-height: 1;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  z-index: 5;
+}
+
+.results-carousel-prev {
+  left: 0.75rem;
+}
+
+.results-carousel-next {
+  right: 0.75rem;
 }
 
 .video-caption {
