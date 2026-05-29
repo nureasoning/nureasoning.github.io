@@ -181,6 +181,33 @@ body {
   object-fit: contain;
   margin: 0;
   background: #000;
+  pointer-events: auto;
+}
+
+.carousel-video-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 1280px;
+  margin: 0.75rem auto 0;
+  padding: 0 0.25rem;
+}
+
+.carousel-video-progress {
+  flex: 1;
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  accent-color: #3273dc;
+}
+
+.carousel-video-time {
+  flex-shrink: 0;
+  min-width: 7rem;
+  font-size: 0.9rem;
+  color: #4a4a4a;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .video-caption {
