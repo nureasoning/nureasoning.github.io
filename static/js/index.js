@@ -42,10 +42,13 @@ $(document).ready(function() {
       if (!container) {
         return;
       }
-      var currentSlide = container.querySelector('.slider-item.is-current');
-      if (!currentSlide && carousel && carousel.state) {
+      var currentSlide = null;
+      if (carousel && carousel.state && carousel.state.length) {
         var currentIndex = Math.abs(carousel.state.index % carousel.state.length);
         currentSlide = container.querySelector('.slider-item[data-slider-index="' + currentIndex + '"]:not([data-cloned])');
+      }
+      if (!currentSlide) {
+        currentSlide = container.querySelector('.slider-item.is-current');
       }
       if (!currentSlide) {
         currentSlide = container.querySelector('.slider-item');
@@ -72,7 +75,7 @@ $(document).ready(function() {
     function scheduleCarouselVideoSync(container, carousel) {
       window.setTimeout(function() {
         syncCarouselVideos(container, carousel);
-      }, 350);
+      }, 450);
     }
 
     var resultsCarouselEl = document.getElementById('results-carousel');
