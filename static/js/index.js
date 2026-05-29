@@ -39,15 +39,33 @@ $(document).ready(function() {
     autoplaySpeed: 20000,
 };
 
+    function syncResultsCarouselVideo() {
+      requestAnimationFrame(function() {
+        var carouselEl = document.getElementById('results-carousel');
+        if (!carouselEl) return;
+
+        carouselEl.querySelectorAll('video').forEach(function(video) {
+          video.pause();
+        });
+
+        var currentSlide = carouselEl.querySelector('.slider-slide.is-current');
+        if (currentSlide) {
+          var activeVideo = currentSlide.querySelector('video');
+          if (activeVideo) {
+            activeVideo.play().catch(function() {});
+          }
+        }
+      });
+    }
+
 		// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
 
-    // Loop on each carousel initialized
-    for(var i = 0; i < carousels.length; i++) {
-    	// Add listener to  event
-    	carousels[i].on('before:show', state => {
-    		console.log(state);
-    	});
+    for (var i = 0; i < carousels.length; i++) {
+      if (carousels[i].element.id === 'results-carousel') {
+        carousels[i].on('after:show', syncResultsCarouselVideo);
+        syncResultsCarouselVideo();
+      }
     }
 
     // Access to bulmaCarousel instance of an element
