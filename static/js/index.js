@@ -31,8 +31,8 @@ $(document).ready(function() {
 
     var options = {
     slidesToScroll: 1,
-    slidesToShow: 2,
-    centerMode: true, // Enable center mode
+    slidesToShow: 1,
+    centerMode: false,
     loop: true,
     infinite: true,
     autoplay: true,
