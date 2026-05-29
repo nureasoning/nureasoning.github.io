@@ -1874,6 +1874,9 @@ var Swipe = function () {
 	}, {
 		key: 'onStartDrag',
 		value: function onStartDrag(e) {
+			if (e.target && e.target.closest && e.target.closest('video')) {
+				return;
+			}
 			if (e.touches) {
 				if (e.touches.length > 1) {
 					return;

@@ -29,6 +29,40 @@ $(document).ready(function() {
 
     });
 
+    function pauseCarouselVideos(container) {
+      if (!container) {
+        return;
+      }
+      container.querySelectorAll('video').forEach(function(video) {
+        video.pause();
+      });
+    }
+
+    function playCurrentCarouselVideo(container) {
+      if (!container) {
+        return;
+      }
+      var currentSlide = container.querySelector('.slider-item.is-current');
+      if (!currentSlide) {
+        return;
+      }
+      var video = currentSlide.querySelector('video');
+      if (!video) {
+        return;
+      }
+      video.muted = true;
+      var playPromise = video.play();
+      if (playPromise && playPromise.catch) {
+        playPromise.catch(function() {});
+      }
+    }
+
+    function syncCarouselVideos(container) {
+      pauseCarouselVideos(container);
+      playCurrentCarouselVideo(container);
+    }
+
+    var resultsCarouselEl = document.getElementById('results-carousel');
     var options = {
     slidesToScroll: 1,
     slidesToShow: 1,
@@ -39,97 +73,21 @@ $(document).ready(function() {
     autoplaySpeed: 20000,
 };
 
-    function stopCarouselControlPropagation(carouselEl) {
-      var controlEvents = ['mousedown', 'touchstart', 'pointerdown', 'click'];
-
-      carouselEl.querySelectorAll('video').forEach(function(video) {
-        controlEvents.forEach(function(eventName) {
-          video.addEventListener(eventName, function(event) {
-            event.stopPropagation();
-          });
-        });
-      });
-    }
-
-    function disableResultsCarouselSwipe(carousel) {
-      if (!carousel || !carousel.container || !carousel._swipe) {
-        return;
-      }
-
-      carousel.container.removeEventListener('mousedown', carousel._swipe.onStartDrag);
-      carousel.container.removeEventListener('touchstart', carousel._swipe.onStartDrag);
-      window.removeEventListener('mousemove', carousel._swipe.onMoveDrag);
-      window.removeEventListener('touchmove', carousel._swipe.onMoveDrag);
-      window.removeEventListener('mouseup', carousel._swipe.onStopDrag);
-      window.removeEventListener('touchend', carousel._swipe.onStopDrag);
-      window.removeEventListener('touchcancel', carousel._swipe.onStopDrag);
-    }
-
-    function playCenteredCarouselVideo() {
-      var carouselEl = document.getElementById('results-carousel');
-      if (!carouselEl) return;
-
-      carouselEl.querySelectorAll('video').forEach(function(video) {
-        video.pause();
-      });
-
-      var slider = carouselEl.querySelector('.slider');
-      if (!slider) return;
-
-      var sliderRect = slider.getBoundingClientRect();
-      var centerX = sliderRect.left + sliderRect.width / 2;
-      var activeVideo = null;
-      var bestDistance = Infinity;
-
-      carouselEl.querySelectorAll('.slider-item').forEach(function(item) {
-        var rect = item.getBoundingClientRect();
-        if (rect.width === 0) return;
-
-        var distance = Math.abs(rect.left + rect.width / 2 - centerX);
-        if (distance < bestDistance) {
-          bestDistance = distance;
-          activeVideo = item.querySelector('video');
-        }
-      });
-
-      if (activeVideo) {
-        activeVideo.muted = true;
-        var playPromise = activeVideo.play();
-        if (playPromise && playPromise.catch) {
-          playPromise.catch(function() {});
-        }
-      }
-    }
-
-    function scheduleCarouselVideoSync() {
-      requestAnimationFrame(function() {
-        requestAnimationFrame(playCenteredCarouselVideo);
-      });
-    }
-
 		// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
 
-    var resultsCarouselEl = document.getElementById('results-carousel');
     for (var i = 0; i < carousels.length; i++) {
-      if (carousels[i].element.id === 'results-carousel') {
-        carousels[i].on('show', scheduleCarouselVideoSync);
-
-        var sliderContainer = resultsCarouselEl.querySelector('.slider-container');
-        if (sliderContainer) {
-          sliderContainer.addEventListener('transitionend', scheduleCarouselVideoSync);
-        }
-
-        resultsCarouselEl.addEventListener('click', function(event) {
-          if (event.target.closest('.slider-navigation-next, .slider-navigation-previous, .slider-pagination, .slider-page')) {
-            scheduleCarouselVideoSync();
-          }
+      if (carousels[i].element === resultsCarouselEl) {
+        carousels[i].on('show', function() {
+          syncCarouselVideos(resultsCarouselEl);
         });
-
-        stopCarouselControlPropagation(resultsCarouselEl);
-        disableResultsCarouselSwipe(carousels[i]);
-        scheduleCarouselVideoSync();
       }
+    }
+
+    if (resultsCarouselEl) {
+      window.setTimeout(function() {
+        syncCarouselVideos(resultsCarouselEl);
+      }, 150);
     }
 
     // Access to bulmaCarousel instance of an element
