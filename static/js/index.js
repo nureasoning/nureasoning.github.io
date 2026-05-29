@@ -94,6 +94,8 @@ $(document).ready(function() {
     for (var i = 0; i < carousels.length; i++) {
       if (carousels[i].element === resultsCarouselEl) {
         var resultsCarousel = carousels[i];
+        resultsCarousel.options.autoplay = false;
+        resultsCarousel.stop();
         carousels[i].on('show', function() {
           scheduleCarouselVideoSync(resultsCarouselEl, resultsCarousel);
         });
