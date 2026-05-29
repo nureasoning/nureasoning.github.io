@@ -36,17 +36,30 @@ $(document).ready(function() {
     loop: true,
     infinite: true,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 20000,
 };
+
+    var CAROUSEL_PLAYBACK_RATE = 2;
+
+    function setCarouselVideoSpeed(video) {
+      video.defaultPlaybackRate = CAROUSEL_PLAYBACK_RATE;
+      video.playbackRate = CAROUSEL_PLAYBACK_RATE;
+    }
+
+    document.querySelectorAll('#results-carousel video').forEach(function(video) {
+      setCarouselVideoSpeed(video);
+      video.addEventListener('play', function() {
+        setCarouselVideoSpeed(video);
+      });
+    });
 
 		// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
 
     // Loop on each carousel initialized
     for(var i = 0; i < carousels.length; i++) {
-    	// Add listener to  event
-    	carousels[i].on('before:show', state => {
-    		console.log(state);
+    	carousels[i].on('before:show', function() {
+        document.querySelectorAll('#results-carousel video').forEach(setCarouselVideoSpeed);
     	});
     }
 
