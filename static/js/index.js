@@ -39,119 +39,14 @@ $(document).ready(function() {
     autoplaySpeed: 20000,
 };
 
-    var activeCarouselVideo = null;
-    var isScrubbingProgress = false;
-    var carouselProgress = document.getElementById('carousel-video-progress');
-    var carouselTimeLabel = document.getElementById('carousel-video-time');
-
-    function formatVideoTime(seconds) {
-      if (!isFinite(seconds) || seconds < 0) {
-        return '0:00';
-      }
-      var mins = Math.floor(seconds / 60);
-      var secs = Math.floor(seconds % 60);
-      return mins + ':' + String(secs).padStart(2, '0');
-    }
-
-    function updateCarouselProgressUI() {
-      if (!carouselProgress || !activeCarouselVideo || isScrubbingProgress) {
-        return;
-      }
-
-      var duration = activeCarouselVideo.duration;
-      if (!isFinite(duration) || duration <= 0) {
-        carouselProgress.value = 0;
-        carouselProgress.max = 100;
-        if (carouselTimeLabel) {
-          carouselTimeLabel.textContent = '0:00 / 0:00';
-        }
-        return;
-      }
-
-      carouselProgress.max = duration;
-      carouselProgress.value = activeCarouselVideo.currentTime;
-      if (carouselTimeLabel) {
-        carouselTimeLabel.textContent = formatVideoTime(activeCarouselVideo.currentTime) + ' / ' + formatVideoTime(duration);
-      }
-    }
-
-    function bindCarouselVideoProgress(video) {
-      if (video.dataset.progressBound) {
-        return;
-      }
-      video.dataset.progressBound = 'true';
-      video.addEventListener('timeupdate', updateCarouselProgressUI);
-      video.addEventListener('loadedmetadata', updateCarouselProgressUI);
-      video.addEventListener('durationchange', updateCarouselProgressUI);
-      video.addEventListener('seeked', updateCarouselProgressUI);
-    }
-
-    function setActiveCarouselVideo(video) {
-      activeCarouselVideo = video || null;
-      if (activeCarouselVideo) {
-        bindCarouselVideoProgress(activeCarouselVideo);
-        updateCarouselProgressUI();
-      }
-    }
-
     function stopCarouselControlPropagation(carouselEl) {
       var controlEvents = ['mousedown', 'touchstart', 'pointerdown', 'click'];
-      var controls = carouselEl.parentElement
-        ? carouselEl.parentElement.querySelector('.carousel-video-controls')
-        : null;
 
-      [carouselEl].concat(controls ? [controls] : []).forEach(function(root) {
-        root.querySelectorAll('video, .carousel-video-controls, .carousel-video-controls *').forEach(function(element) {
-          controlEvents.forEach(function(eventName) {
-            element.addEventListener(eventName, function(event) {
-              event.stopPropagation();
-            });
+      carouselEl.querySelectorAll('video').forEach(function(video) {
+        controlEvents.forEach(function(eventName) {
+          video.addEventListener(eventName, function(event) {
+            event.stopPropagation();
           });
-        });
-      });
-    }
-
-    function initCarouselProgressControls() {
-      if (!carouselProgress) {
-        return;
-      }
-
-      carouselProgress.addEventListener('input', function() {
-        isScrubbingProgress = true;
-        if (!activeCarouselVideo || !isFinite(activeCarouselVideo.duration)) {
-          return;
-        }
-
-        activeCarouselVideo.currentTime = parseFloat(carouselProgress.value);
-        if (carouselTimeLabel) {
-          carouselTimeLabel.textContent = formatVideoTime(activeCarouselVideo.currentTime) + ' / ' + formatVideoTime(activeCarouselVideo.duration);
-        }
-      });
-
-      carouselProgress.addEventListener('change', function() {
-        isScrubbingProgress = false;
-        updateCarouselProgressUI();
-      });
-
-      ['mousedown', 'mouseup', 'touchstart', 'touchend'].forEach(function(eventName) {
-        carouselProgress.addEventListener(eventName, function(event) {
-          event.stopPropagation();
-          if (eventName === 'mousedown' || eventName === 'touchstart') {
-            isScrubbingProgress = true;
-          }
-          if (eventName === 'mouseup' || eventName === 'touchend') {
-            isScrubbingProgress = false;
-            updateCarouselProgressUI();
-          }
-        });
-      });
-
-      ['mouseup', 'touchend', 'pointerup'].forEach(function(eventName) {
-        window.addEventListener(eventName, function() {
-          if (isScrubbingProgress) {
-            isScrubbingProgress = false;
-            updateCarouselProgressUI();
-          }
         });
       });
     }
@@ -184,27 +79,19 @@ $(document).ready(function() {
       });
 
       if (activeVideo) {
-        setActiveCarouselVideo(activeVideo);
         activeVideo.muted = true;
         var playPromise = activeVideo.play();
         if (playPromise && playPromise.catch) {
           playPromise.catch(function() {});
         }
-      } else {
-        setActiveCarouselVideo(null);
       }
     }
 
     function scheduleCarouselVideoSync() {
-      if (isScrubbingProgress) {
-        return;
-      }
       requestAnimationFrame(function() {
         requestAnimationFrame(playCenteredCarouselVideo);
       });
     }
-
-    initCarouselProgressControls();
 
 		// Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
