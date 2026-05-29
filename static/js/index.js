@@ -38,11 +38,18 @@ $(document).ready(function() {
       });
     }
 
-    function playCurrentCarouselVideo(container) {
+    function playCurrentCarouselVideo(container, carousel) {
       if (!container) {
         return;
       }
       var currentSlide = container.querySelector('.slider-item.is-current');
+      if (!currentSlide && carousel && carousel.state) {
+        var currentIndex = Math.abs(carousel.state.index % carousel.state.length);
+        currentSlide = container.querySelector('.slider-item[data-slider-index="' + currentIndex + '"]:not([data-cloned])');
+      }
+      if (!currentSlide) {
+        currentSlide = container.querySelector('.slider-item');
+      }
       if (!currentSlide) {
         return;
       }
@@ -57,9 +64,15 @@ $(document).ready(function() {
       }
     }
 
-    function syncCarouselVideos(container) {
+    function syncCarouselVideos(container, carousel) {
       pauseCarouselVideos(container);
-      playCurrentCarouselVideo(container);
+      playCurrentCarouselVideo(container, carousel);
+    }
+
+    function scheduleCarouselVideoSync(container, carousel) {
+      window.setTimeout(function() {
+        syncCarouselVideos(container, carousel);
+      }, 350);
     }
 
     var resultsCarouselEl = document.getElementById('results-carousel');
@@ -78,16 +91,24 @@ $(document).ready(function() {
 
     for (var i = 0; i < carousels.length; i++) {
       if (carousels[i].element === resultsCarouselEl) {
+        var resultsCarousel = carousels[i];
         carousels[i].on('show', function() {
-          syncCarouselVideos(resultsCarouselEl);
+          scheduleCarouselVideoSync(resultsCarouselEl, resultsCarousel);
         });
       }
     }
 
     if (resultsCarouselEl) {
       window.setTimeout(function() {
-        syncCarouselVideos(resultsCarouselEl);
-      }, 150);
+        var resultsCarousel = null;
+        for (var j = 0; j < carousels.length; j++) {
+          if (carousels[j].element === resultsCarouselEl) {
+            resultsCarousel = carousels[j];
+            break;
+          }
+        }
+        syncCarouselVideos(resultsCarouselEl, resultsCarousel);
+      }, 350);
     }
 
     // Access to bulmaCarousel instance of an element
